@@ -1,25 +1,12 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { MongoClient } from 'mongodb';
+import { describe, it, expect } from 'vitest';
 import { seedDatabase, PEOPLE_COLLECTION, ARTISTS_COLLECTION } from './seed';
+import { getDb } from '../core/database';
 
-let mongod: MongoMemoryServer;
-let client: MongoClient;
 
-beforeAll(async () => {
-  mongod = await MongoMemoryServer.create();
-  client = new MongoClient(mongod.getUri());
-  await client.connect();
-});
-
-afterAll(async () => {
-  await client.close();
-  await mongod.stop();
-});
 
 describe('seedDatabase', () => {
   it('seeds people and artists from dataset.txt', async () => {
-    const db = client.db('test');
+    const db= getDb();
     await seedDatabase(db);
 
     const people = await db.collection(PEOPLE_COLLECTION).find().toArray();
@@ -30,7 +17,7 @@ describe('seedDatabase', () => {
   });
 
   it('clears existing data before seeding', async () => {
-    const db = client.db('test');
+    const db = getDb();
     await seedDatabase(db);
     await seedDatabase(db);
 
@@ -39,7 +26,7 @@ describe('seedDatabase', () => {
   });
 
   it('seeds correct people fields', async () => {
-    const db = client.db('test');
+    const db = getDb();
     await seedDatabase(db);
 
     const eddy = await db.collection(PEOPLE_COLLECTION).findOne({ name: 'Eddy Verde' });
@@ -50,7 +37,7 @@ describe('seedDatabase', () => {
   });
 
   it('seeds correct artist fields', async () => {
-    const db = client.db('test');
+    const db = getDb();
     await seedDatabase(db);
 
     const rock = await db.collection(ARTISTS_COLLECTION).findOne({ genre: 'Rock' });
