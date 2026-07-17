@@ -10,11 +10,22 @@ import yaml from 'js-yaml';
 
 extendZodWithOpenApi(z);
 
-// Re-import schemas after extending zod
 import { SearchQuerySchema, SearchResponseSchema } from '../src/modules/people/people.schema';
 import { AddArtistBodySchema } from '../src/modules/artists/artists.schema';
 
 const registry = new OpenAPIRegistry();
+
+const ValidationErrorSchema = registry.registerComponent('schemas', 'ValidationError', {
+  component: z.object({
+    error: z.string(),
+    details: z.array(
+      z.object({
+        field: z.string(),
+        message: z.string(),
+      })
+    ),
+  }),
+});
 
 // Health endpoint
 registry.registerPath({
@@ -38,6 +49,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/api/people/search',
+  operationId: 'searchPeople',
   summary: 'Search people',
   description:
     'Search for people by a query string. Scores each person based on substring matches across name, music genres, movies, location, and associated artists. Returns only matches with score > 0, sorted by score descending then name ascending.',
@@ -58,10 +70,7 @@ registry.registerPath({
       description: 'Invalid query parameters',
       content: {
         'application/json': {
-          schema: z.object({
-            error: z.string(),
-            details: z.array(z.object({ field: z.string(), message: z.string() })),
-          }),
+          schema: ValidationErrorSchema
         },
       },
     },
@@ -72,6 +81,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'post',
   path: '/api/artists',
+  operationId: 'addArtist',
   summary: 'Add a music artist to a genre',
   description:
     'Adds an artist to the specified genre in the in-memory dataset. Duplicates are ignored. Subsequent search calls will reflect this addition.',
@@ -93,10 +103,7 @@ registry.registerPath({
       description: 'Invalid request body',
       content: {
         'application/json': {
-          schema: z.object({
-            error: z.string(),
-            details: z.array(z.object({ field: z.string(), message: z.string() })),
-          }),
+          schema: ValidationErrorSchema
         },
       },
     },

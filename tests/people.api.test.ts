@@ -1,17 +1,8 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { setupTestDatabase, teardownTestDatabase } from './setup';
+import { describe, it, expect} from 'vitest';
 import { createApp } from '../src/app';
 import { getAgent } from './helpers';
 
 const app = createApp();
-
-beforeAll(async () => {
-  await setupTestDatabase();
-});
-
-afterAll(async () => {
-  await teardownTestDatabase();
-});
 
 describe('GET /api/people/search', () => {
   it('returns 400 when q param is missing', async () => {

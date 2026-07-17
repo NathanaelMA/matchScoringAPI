@@ -9,9 +9,9 @@ async function main() {
 
   const app = createApp();
 
-  app.listen(env.port, () => {
-    console.log(`Server running on http://localhost:${env.port}`);
-    console.log(`API docs: http://localhost:${env.port}/api-docs`);
+  app.listen(env.PORT, () => {
+    console.log(`Server running on http://localhost:${env.PORT}`);
+    console.log(`API docs: http://localhost:${env.PORT}/api-docs`);
   });
 }
 

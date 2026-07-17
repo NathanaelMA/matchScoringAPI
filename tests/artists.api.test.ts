@@ -1,21 +1,9 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { setupTestDatabase, teardownTestDatabase, resetDatabase } from './setup';
+import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/app';
 import { getAgent } from './helpers';
 
 const app = createApp();
 
-beforeAll(async () => {
-  await setupTestDatabase();
-});
-
-beforeEach(async () => {
-  await resetDatabase();
-});
-
-afterAll(async () => {
-  await teardownTestDatabase();
-});
 
 describe('POST /api/artists', () => {
   it('returns 400 when body is missing', async () => {

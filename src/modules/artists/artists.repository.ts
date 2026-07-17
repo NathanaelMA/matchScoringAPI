@@ -2,12 +2,12 @@ import { Collection, Db } from 'mongodb';
 import { ArtistRecord } from '../../database/parser';
 import { ARTISTS_COLLECTION } from '../../database/seed';
 
-export interface ArtistDocument extends ArtistRecord {
-  _id?: unknown;
-}
+// export interface ArtistDocument extends ArtistRecord {
+//   _id?: unknown;
+// }
 
-export function getArtistsCollection(db: Db): Collection<ArtistDocument> {
-  return db.collection<ArtistDocument>(ARTISTS_COLLECTION);
+export function getArtistsCollection(db: Db): Collection<ArtistRecord> {
+  return db.collection<ArtistRecord>(ARTISTS_COLLECTION);
 }
 
 export async function getAllArtistsMap(db: Db): Promise<Map<string, string[]>> {
