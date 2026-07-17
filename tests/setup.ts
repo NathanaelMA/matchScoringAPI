@@ -1,21 +1,15 @@
-import { vi } from 'vitest';
-import { MongoClient, Db } from 'mongodb';
+import { beforeAll, afterAll, beforeEach } from 'vitest';
 import { connectDatabase, closeDatabase, getDb } from '../src/core/database';
 import { seedDatabase } from '../src/database/seed';
 
-export async function setupTestDatabase(): Promise<Db> {
-  const db = await connectDatabase();
-  await seedDatabase(db);
-  return db;
-}
+beforeAll(async () => {
+  await connectDatabase();
+});
 
-export async function teardownTestDatabase(): Promise<void> {
+beforeEach(async () => {
+  await seedDatabase(getDb());
+});
+
+afterAll(async () => {
   await closeDatabase();
-}
-
-export async function resetDatabase(): Promise<void> {
-  const db = getDb();
-  await seedDatabase(db);
-}
-
-export { getDb };
+});

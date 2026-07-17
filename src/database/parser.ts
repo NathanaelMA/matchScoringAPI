@@ -88,7 +88,8 @@ function splitSemicolon(value: string): string[] {
 }
 
 export function loadDataset(): ParsedDataset {
-  const filePath = path.join(__dirname, 'dataset.txt');
-  const raw = fs.readFileSync(filePath, 'utf-8');
+
+const filePath = path.join(process.cwd(), 'src/database/dataset.txt');
+const raw = fs.readFileSync(filePath, 'utf-8');
   return parseDataset(raw);
 }
