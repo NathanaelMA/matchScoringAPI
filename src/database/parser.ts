@@ -36,7 +36,7 @@ function parsePeople(section: string): PersonRecord[] {
   return blocks.map((block) => {
     const lines = block.split('\n').map((l) => l.trim());
 
-    const name = extractField(lines, 'Name') ?? '';
+    const name = extractField(lines, 'Name')!;
     const genreRaw = extractField(lines, 'Music Genre') ?? '';
     const moviesRaw = extractField(lines, 'Movies') ?? '';
     const location = extractField(lines, 'Location') ?? '';

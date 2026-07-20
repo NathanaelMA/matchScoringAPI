@@ -91,4 +91,21 @@ EmptyGenre:
 
     expect(result.artists).toEqual([{ genre: 'Rock', artists: ['Led Zeppelin'] }]);
   });
+
+  it('ignores a single people block when Name field is missing', () => {
+    const input = `PEOPLE
+---------------------------------------------
+Music Genre: Rock; Country
+Movies: Avatar; The Good, the Bad and the Ugly
+Location: Florida
+
+
+MUSIC ARTISTS
+---------------------------------------------
+`;
+
+    const result = parseDataset(input);
+    expect(result.people).toEqual([]);
+    expect(result.artists).toEqual([]);
+  });
 });
