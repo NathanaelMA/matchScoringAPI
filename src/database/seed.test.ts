@@ -1,12 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { seedDatabase, PEOPLE_COLLECTION, ARTISTS_COLLECTION } from './seed';
 import { getDb } from '../core/database';
 
-
-
 describe('seedDatabase', () => {
   it('seeds people and artists from dataset.txt', async () => {
-    const db= getDb();
+    const db = getDb();
     await seedDatabase(db);
 
     const people = await db.collection(PEOPLE_COLLECTION).find().toArray();
@@ -42,5 +40,26 @@ describe('seedDatabase', () => {
 
     const rock = await db.collection(ARTISTS_COLLECTION).findOne({ genre: 'Rock' });
     expect(rock?.artists).toContain('Led Zeppelin');
+  });
+
+  it('skips inserts when parsed dataset is empty', async () => {
+    vi.resetModules();
+    vi.doMock('./parser', () => ({
+      loadDataset: () => ({ people: [], artists: [] }),
+    }));
+
+    const mockedSeedModule = await import('./seed.js');
+    const db = getDb();
+
+    await mockedSeedModule.seedDatabase(db);
+
+    const people = await db.collection(mockedSeedModule.PEOPLE_COLLECTION).find().toArray();
+    const artists = await db.collection(mockedSeedModule.ARTISTS_COLLECTION).find().toArray();
+
+    expect(people).toEqual([]);
+    expect(artists).toEqual([]);
+
+    vi.doUnmock('./parser');
+    vi.resetModules();
   });
 });

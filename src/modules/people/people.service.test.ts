@@ -1,11 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { MongoClient, Db } from 'mongodb';
-import { seedDatabase } from '../../database/seed';
+import { describe, it, expect } from 'vitest';
 import { searchPeople } from './people.service';
 import { getDb } from '../../core/database';
-
-
 
 describe('searchPeople', () => {
   it('returns results for query "ed"', async () => {
@@ -54,5 +49,21 @@ describe('searchPeople', () => {
     for (let i = 0; i < results.length - 1; i++) {
       expect(results[i].score).toBeGreaterThanOrEqual(results[i + 1].score);
     }
+  });
+
+  it('handles genres missing from artists map', async () => {
+    const db = getDb();
+    await db.collection('people').insertOne({
+      name: 'Unique Branch Person',
+      genres: ['UnknownGenre'],
+      movies: [],
+      location: 'Nowhere',
+    });
+
+    const results = await searchPeople(db, 'unique branch person');
+    const entry = results.find((r) => r.name === 'Unique Branch Person');
+
+    expect(entry).toBeTruthy();
+    expect(entry?.matches).toContain('name');
   });
 });

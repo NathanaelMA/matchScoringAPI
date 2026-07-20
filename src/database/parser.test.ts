@@ -57,4 +57,55 @@ describe('parseDataset', () => {
     expect(result.people).toHaveLength(0);
     expect(result.artists).toHaveLength(0);
   });
+
+  it('handles input without artists section delimiter', () => {
+    const result = parseDataset('PEOPLE\n---\nName: Solo Person\n');
+    expect(result.people).toHaveLength(1);
+    expect(result.artists).toEqual([]);
+  });
+
+  it('fills missing person fields with defaults and ignores stray artist lines', () => {
+    const input = `PEOPLE
+---------------------------------------------
+Name: Minimal User
+
+
+MUSIC ARTISTS
+---------------------------------------------
+orphan line before genre
+Rock:
+Led Zeppelin
+EmptyGenre:
+`;
+
+    const result = parseDataset(input);
+
+    expect(result.people).toEqual([
+      {
+        name: 'Minimal User',
+        genres: [],
+        movies: [],
+        location: '',
+      },
+    ]);
+
+    expect(result.artists).toEqual([{ genre: 'Rock', artists: ['Led Zeppelin'] }]);
+  });
+
+  it('ignores a single people block when Name field is missing', () => {
+    const input = `PEOPLE
+---------------------------------------------
+Music Genre: Rock; Country
+Movies: Avatar; The Good, the Bad and the Ugly
+Location: Florida
+
+
+MUSIC ARTISTS
+---------------------------------------------
+`;
+
+    const result = parseDataset(input);
+    expect(result.people).toEqual([]);
+    expect(result.artists).toEqual([]);
+  });
 });

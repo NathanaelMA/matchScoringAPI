@@ -12,43 +12,91 @@ window.OPENAPI_SPEC = {
     }
   ],
   "components": {
-    "schemas": {},
-    "parameters": {}
-  },
-  "paths": {
-    "/api/health": {
-      "get": {
-        "summary": "Health check",
-        "tags": [
-          "Health"
-        ],
-        "responses": {
-          "200": {
-            "description": "Service is healthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ok"
-                      ]
+    "schemas": {
+      "ValidationError": {
+        "component": {
+          "def": {
+            "type": "object",
+            "shape": {
+              "error": {
+                "def": {
+                  "type": "string"
+                },
+                "type": "string",
+                "format": null,
+                "minLength": null,
+                "maxLength": null
+              },
+              "details": {
+                "def": {
+                  "type": "array",
+                  "element": {
+                    "def": {
+                      "type": "object",
+                      "shape": {
+                        "field": {
+                          "def": {
+                            "type": "string"
+                          },
+                          "type": "string",
+                          "format": null,
+                          "minLength": null,
+                          "maxLength": null
+                        },
+                        "message": {
+                          "def": {
+                            "type": "string"
+                          },
+                          "type": "string",
+                          "format": null,
+                          "minLength": null,
+                          "maxLength": null
+                        }
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "array",
+                "element": {
+                  "def": {
+                    "type": "object",
+                    "shape": {
+                      "field": {
+                        "def": {
+                          "type": "string"
+                        },
+                        "type": "string",
+                        "format": null,
+                        "minLength": null,
+                        "maxLength": null
+                      },
+                      "message": {
+                        "def": {
+                          "type": "string"
+                        },
+                        "type": "string",
+                        "format": null,
+                        "minLength": null,
+                        "maxLength": null
+                      }
                     }
                   },
-                  "required": [
-                    "status"
-                  ]
+                  "type": "object"
                 }
               }
             }
-          }
+          },
+          "type": "object"
         }
       }
     },
+    "parameters": {}
+  },
+  "paths": {
     "/api/people/search": {
       "get": {
+        "operationId": "searchPeople",
         "summary": "Search people",
         "description": "Search for people by a query string. Scores each person based on substring matches across name, music genres, movies, location, and associated artists. Returns only matches with score > 0, sorted by score descending then name ascending.",
         "tags": [
@@ -119,34 +167,10 @@ window.OPENAPI_SPEC = {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "field": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "field",
-                          "message"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "name": "ValidationError",
+                  "ref": {
+                    "$ref": "#/components/schemas/ValidationError"
+                  }
                 }
               }
             }
@@ -156,6 +180,7 @@ window.OPENAPI_SPEC = {
     },
     "/api/artists": {
       "post": {
+        "operationId": "addArtist",
         "summary": "Add a music artist to a genre",
         "description": "Adds an artist to the specified genre in the in-memory dataset. Duplicates are ignored. Subsequent search calls will reflect this addition.",
         "tags": [
@@ -197,34 +222,10 @@ window.OPENAPI_SPEC = {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "details": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "field": {
-                            "type": "string"
-                          },
-                          "message": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "field",
-                          "message"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "name": "ValidationError",
+                  "ref": {
+                    "$ref": "#/components/schemas/ValidationError"
+                  }
                 }
               }
             }

@@ -19,10 +19,10 @@ export interface ParsedDataset {
 }
 
 export function parseDataset(raw: string): ParsedDataset {
-  const [peopleSection, artistsSection] = raw.split(/MUSIC ARTISTS\s*[-]+/);
+  const [peopleSection = '', artistsSection = ''] = raw.split(/MUSIC ARTISTS\s*[-]+/);
 
-  const people = parsePeople(peopleSection ?? '');
-  const artists = parseArtists(artistsSection ?? '');
+  const people = parsePeople(peopleSection);
+  const artists = parseArtists(artistsSection);
 
   return { people, artists };
 }
@@ -36,7 +36,7 @@ function parsePeople(section: string): PersonRecord[] {
   return blocks.map((block) => {
     const lines = block.split('\n').map((l) => l.trim());
 
-    const name = extractField(lines, 'Name') ?? '';
+    const name = extractField(lines, 'Name')!;
     const genreRaw = extractField(lines, 'Music Genre') ?? '';
     const moviesRaw = extractField(lines, 'Movies') ?? '';
     const location = extractField(lines, 'Location') ?? '';
@@ -88,7 +88,6 @@ function splitSemicolon(value: string): string[] {
 }
 
 export function loadDataset(): ParsedDataset {
-
 const filePath = path.join(process.cwd(), 'src/database/dataset.txt');
 const raw = fs.readFileSync(filePath, 'utf-8');
   return parseDataset(raw);

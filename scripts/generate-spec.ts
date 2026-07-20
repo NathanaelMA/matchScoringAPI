@@ -27,25 +27,6 @@ const ValidationErrorSchema = registry.registerComponent('schemas', 'ValidationE
   }),
 });
 
-// Health endpoint
-registry.registerPath({
-  method: 'get',
-  path: '/api/health',
-  summary: 'Health check',
-  tags: ['Health'],
-  responses: {
-    200: {
-      description: 'Service is healthy',
-      content: {
-        'application/json': {
-          schema: z.object({ status: z.literal('ok') }),
-        },
-      },
-    },
-  },
-});
-
-// GET /api/people/search
 registry.registerPath({
   method: 'get',
   path: '/api/people/search',
@@ -77,7 +58,6 @@ registry.registerPath({
   },
 });
 
-// POST /api/artists
 registry.registerPath({
   method: 'post',
   path: '/api/artists',
@@ -122,13 +102,15 @@ const doc = generator.generateDocument({
   servers: [{ url: 'http://localhost:3000', description: 'Local development' }],
 });
 
+const plainDoc = JSON.parse(JSON.stringify(doc));
+
 const docsDir = path.join(__dirname, '../docs');
 const yamlOutputPath = path.join(docsDir, 'openapi.yaml');
 const jsOutputPath = path.join(docsDir, 'openapi.js');
 
 fs.mkdirSync(docsDir, { recursive: true });
-fs.writeFileSync(yamlOutputPath, yaml.dump(doc, { lineWidth: 120 }), 'utf-8');
-fs.writeFileSync(jsOutputPath, `window.OPENAPI_SPEC = ${JSON.stringify(doc, null, 2)};\n`, 'utf-8');
+fs.writeFileSync(yamlOutputPath, yaml.dump(plainDoc, { lineWidth: 120 }), 'utf-8');
+fs.writeFileSync(jsOutputPath, `window.OPENAPI_SPEC = ${JSON.stringify(plainDoc, null, 2)};\n`, 'utf-8');
 
 console.log(`OpenAPI spec written to ${yamlOutputPath}`);
 console.log(`OpenAPI browser bundle written to ${jsOutputPath}`);

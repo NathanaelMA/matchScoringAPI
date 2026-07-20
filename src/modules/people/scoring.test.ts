@@ -57,10 +57,9 @@ describe('scorePersonForQuery', () => {
   });
 
   it('counts each property only once even if multiple values match', () => {
-    // "The" matches both "The Departed" and "The Godfather" and "The Godfather"
     const result = scorePersonForQuery(greta, 'the');
     expect(result?.matches).toContain('movies');
-    expect(result?.score).toBe(1); // only 1pt for movies even though 2 movies match
+    expect(result?.score).toBe(1); 
   });
 
   it('is case insensitive', () => {
@@ -80,7 +79,6 @@ describe('scorePersonForQuery', () => {
   });
 
   it('accumulates multiple matching fields', () => {
-    // "ed" matches name "Eddy Verde" (4) and artist "Led Zeppelin" (2)
     const result = scorePersonForQuery(eddy, 'ed');
     expect(result?.score).toBe(6);
     expect(result?.matches).toContain('name');
