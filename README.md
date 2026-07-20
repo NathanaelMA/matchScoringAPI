@@ -167,8 +167,3 @@ The OpenAPI spec is **auto-generated** — do not edit `docs/openapi.yaml` direc
 
 GitHub Pages will serve the updated spec at the docs URL above.
 
----
-
-## OpenAPI Spec
-
-Spec lives at `https://nathanaelma.github.io/matchScoringAPI/`
