@@ -94,37 +94,6 @@ window.OPENAPI_SPEC = {
     "parameters": {}
   },
   "paths": {
-    "/health": {
-      "get": {
-        "summary": "Health check",
-        "tags": [
-          "Health"
-        ],
-        "responses": {
-          "200": {
-            "description": "Service is healthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ok"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "status"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/people/search": {
       "get": {
         "operationId": "searchPeople",
