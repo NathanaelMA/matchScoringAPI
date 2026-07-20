@@ -29,23 +29,6 @@ const ValidationErrorSchema = registry.registerComponent('schemas', 'ValidationE
 
 registry.registerPath({
   method: 'get',
-  path: '/health',
-  summary: 'Health check',
-  tags: ['Health'],
-  responses: {
-    200: {
-      description: 'Service is healthy',
-      content: {
-        'application/json': {
-          schema: z.object({ status: z.literal('ok') }),
-        },
-      },
-    },
-  },
-});
-
-registry.registerPath({
-  method: 'get',
   path: '/api/people/search',
   operationId: 'searchPeople',
   summary: 'Search people',
