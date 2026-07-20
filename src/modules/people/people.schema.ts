@@ -5,7 +5,7 @@ extendZodWithOpenApi(z);
 
 export const SearchQuerySchema = z.object({
   q: z
-    .string()
+    .string().trim()
     .min(1, 'Query must not be empty')
     .openapi({ description: 'Search query string', example: 'ed' }),
 });

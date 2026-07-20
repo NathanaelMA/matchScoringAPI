@@ -22,11 +22,6 @@ A spec-driven REST API for searching people by query and managing music artists.
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
 ### Install
 
 ```bash
@@ -34,12 +29,6 @@ npm install
 ```
 
 ### Environment
-
-Copy the example env file:
-
-```bash
-cp .env.example .env
-```
 
 | Variable | Default | Description |
 |---|---|---|
@@ -58,16 +47,14 @@ Server starts at `http://localhost:3000`. The in-memory MongoDB is seeded automa
 
 ```bash
 npm run build
-node dist/src/server.js
+npm run start
 ```
 
 ---
 
 ## API Reference
 
-All routes are prefixed with `/api`.
-
-### `GET /api/health`
+### `GET /health`
 
 Returns service status.
 
@@ -170,48 +157,6 @@ curl "http://localhost:3000/api/people/search?q=beethoven"
 
 ---
 
-## Project Structure
-
-```
-src/
-├── server.ts                     # HTTP server entry point
-├── app.ts                        # Express app setup
-├── routes.ts                     # Mounts all feature routes
-├── config/
-│   ├── constants.ts              # Scoring weights
-│   └── env.ts                    # Environment config
-├── core/
-│   ├── database.ts               # MongoDB connection (in-memory)
-│   ├── errors/app.error.ts       # Custom errors
-│   └── middleware/
-│       ├── error.handler.ts      # Global error handler
-│       └── validate.ts           # Zod validation middleware
-├── database/
-│   ├── dataset.txt               # Source dataset
-│   ├── parser.ts                 # Parses dataset into typed objects
-│   └── seed.ts                   # Seeds MongoDB on startup
-└── modules/
-    ├── health/                   # GET /api/health
-    ├── artists/                  # POST /api/artists
-    └── people/                   # GET /api/people/search + scoring algorithm
-
-scripts/
-└── generate-spec.ts              # Generates docs/openapi.yaml from Zod schemas
-
-docs/
-├── index.html                    # Swagger UI (GitHub Pages)
-└── openapi.yaml                  # Auto-generated OpenAPI 3.1 spec
-
-tests/
-├── setup.ts                      # Test DB setup/teardown
-├── helpers.ts                    # Shared test utilities
-├── fixtures/dataset.ts           # Fixture data
-├── people.api.test.ts            # Integration: GET /api/people/search
-└── artists.api.test.ts           # Integration: POST /api/artists
-```
-
----
-
 ## Updating the API Spec
 
 The OpenAPI spec is **auto-generated** — do not edit `docs/openapi.yaml` directly. Instead:
@@ -224,8 +169,6 @@ GitHub Pages will serve the updated spec at the docs URL above.
 
 ---
 
-## GitHub Pages Setup
+## OpenAPI Spec
 
-1. Push to `main`
-2. Go to **Settings → Pages → Source** → select branch `main`, folder `/docs`
-3. Your spec will be live at `https://nathanaelma.github.io/matchScoringAPI/`
+Spec lives at `https://nathanaelma.github.io/matchScoringAPI/`
